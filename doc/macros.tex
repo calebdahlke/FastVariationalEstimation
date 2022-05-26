@@ -1,0 +1,288 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COMMENTING MACROS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\RED}[1]{{{\color{red}{#1}}}}
+\newcommand{\MAGENTA}[1]{{{\color{magenta}{#1}}}}     
+\newcommand{\TODO}[1]{\RED{[TODO: #1]}}
+\newcommand{\JLP}[1]{\MAGENTA{[Jason: #1]}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% MI estimators
+\newcommand{\Ipost}{\hat{I}_{\text{post}}}
+\newcommand{\Imarg}{\hat{I}_{\text{marg}}}
+\newcommand{\Iml}{\hat{I}_{\text{m}+p}}
+
+% MRF
+\newcommand{\pot}{\psi}
+\newcommand{\epmarg}{q}
+\newcommand{\logpart}{\Phi}
+
+\def\E{\mathbb{E}}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+
+% Info Theory Stuff
+\newcommand{\KL}[2]{\mathrm{KL}(#1\,\|\,#2)}
+
+%
+% List macros
+%
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\deriv}{\mathrm{d}}
+
+\newcommand{\etal}{\textit{et al}}
+\newcommand{\FIG}{Fig.~}
+%\newcommand{\FIGS}{Figs.~}
+
+ \newcommand{\SEC}{Sec.~}
+
+\newcommand{\eg}{\textit{e.g.}~}
+\newcommand{\ie}{\textit{i.e.}~}
+\newcommand{\cf}{\textit{c.f.}~}
+
+
+\newcommand{\EQN}{Eqn.~}
+% \newcommand{\EQN}{Equation }
+\newcommand{\EQNS}{Eqns.~}
+% \newcommand{\EQNS}{Equations }
+
+% distributions
+\newcommand{\Dir}{\ensuremath{\text{Dirichlet}}}
+ 
+% integers
+\newcommand{\ZZ}{\ensuremath{\mathbb{Z}}}
+\newcommand{\RR}{\ensuremath{\mathbb{R}}}
+\newcommand{\Rtwo}{\ensuremath{\RR^2}}
+\newcommand{\Rthree}{\ensuremath{\RR^3}}
+\newcommand{\Rn}{\ensuremath{\RR^n}}
+% 
+%positive integers
+\newcommand{\Zplus}{\ensuremath{\ZZ^+}}
+%positive reals
+\newcommand{\Rplus}{\ensuremath{\RR^+}}
+
+
+% n by n matrices
+\newcommand{\nBynMats}{\ensuremath{\RR^{n \times n}}}
+% m by n matrices
+\newcommand{\mBynMats}{\ensuremath{\RR^{m \times n}}}
+% n by p matrices
+\newcommand{\nBypMats}{\ensuremath{\RR^{n \times p}}}
+% 2 by 2
+\newcommand{\TwoByTwoMats}{\ensuremath{\RR^{2 \times 2}}}
+% 3 by 3
+\newcommand{\ThreeByThreeMats}{\ensuremath{\RR^{3 \times 3}}}
+% 2 by 3
+\newcommand{\TwoByThreeMats}{\ensuremath{\RR^{2 \times 3}}}
+
+
+
+
+% \newcommand{\EqualsDef}{\,{\overset{\text{def}}{=}}\,}
+\newcommand{\EqualsDef}{\triangleq}
+
+
+% set notation
+% \newcommand{\set}[1]{\ensuremath{{\left\{#1\right\}}}}
+\newcommand{\set}[1]{\ensuremath{{\{#1\}}}}
+
+
+\newcommand{\InnerProduct}[2]{\left\langle #1,#2 \right\rangle}
+
+\newcommand{\norm}[1]{{{\left\|#1\right\|}}}
+\newcommand{\sign}[1]{{\mathrm{sign}\left(#1\right)}}
+
+
+\newcommand{\ellTwoNorm}[1]{\norm{#1}_{\ellTwo}}
+
+
+\newcommand{\Acal}{\mathcal{A}}
+\newcommand{\Bcal}{\mathcal{B}}
+\newcommand{\Ccal}{\mathcal{C}}
+\newcommand{\Dcal}{\mathcal{D}}
+\newcommand{\Ecal}{\mathcal{E}}
+\newcommand{\Fcal}{\mathcal{F}}
+\newcommand{\Gcal}{\mathcal{G}}
+\newcommand{\Mcal}{\mathcal{M}}
+\newcommand{\Ncal}{\mathcal{N}}
+\newcommand{\Ocal}{\mathcal{O}}
+\newcommand{\Pcal}{\mathcal{P}}
+\newcommand{\Qcal}{\mathcal{Q}}
+\newcommand{\Tcal}{\mathcal{T}}
+\newcommand{\Ucal}{\mathcal{U}}
+\newcommand{\Vcal}{\mathcal{V}}
+\newcommand{\Wcal}{\mathcal{W}}
+\newcommand{\Xcal}{\mathcal{X}}
+\newcommand{\Ycal}{\mathcal{Y}}
+
+\newcommand{\MATRIX}[2][cccccccccccccccccccc]{\left[
+ \begin{array}{#1}
+ #2
+ \end{array}
+\right]}
+
+
+\newcommand{\TRACE}{\mathrm{trace}}
+
+\newcommand{\var}[1]{\text{var} \big( #1 \big) }
+\newcommand{\cov}[2]{\text{cov} \big( #1,#2 \big)}
+\newcommand{\myt}[1]{\widetilde {#1} }
+
+% bold font math 
+\bmdefine\balpha{\alpha}
+\bmdefine\bbeta{\beta}
+
+\bmdefine\bphi{\phi}
+
+
+\bmdefine\bb{b}
+
+\bmdefine\bx{x}
+\bmdefine\by{y}
+\bmdefine\bdotx{\dot{x}}
+\bmdefine\bxzero{x_{0}}
+\bmdefine\bxone{x_{1}}
+
+\bmdefine\bu{u}
+
+\bmdefine\bv{v}
+\bmdefine\br{r}
+
+
+\bmdefine\bA{A}
+\bmdefine\bB{B}
+
+\bmdefine\bS{S}
+
+\bmdefine\bU{U}
+
+\bmdefine\bV{V}
+\bmdefine\bX{X}
+\bmdefine\bY{Y}
+
+
+%\bmdefine\balpha{\alpha}
+
+ \newcommand{\Nc}{{N_{c}}}
+% \newcommand{\Nc}{N}
+\newcommand{\Ne}{{N_{e}}}
+
+% homo coo
+\newcommand{\bxh}{\widetilde{\bx}}
+
+
+
+
+\newcommand{\GLn}{\ensuremath{\mathrm{GL(n)}}}
+\newcommand{\gln}{\ensuremath{\mathfrak{gl(n)}}}
+
+\newcommand{\GLone}{\ensuremath{\mathrm{GL(1)}}}
+\newcommand{\GLtwo}{\ensuremath{\mathrm{GL(2)}}}
+\newcommand{\glTwo}{\ensuremath{\mathfrak{gl}(2)}}
+
+
+% CPA Stuff
+
+\newcommand{\Ac}[1]{A_{c(#1)}}
+\newcommand{\Bc}[1]{B_{c(#1)}}
+
+\newcommand{\Vaff}{\Vcal_{\mathrm{aff}}}
+
+\newcommand{\Vpa}{\Vcal_{\mathrm{PA}}}
+\newcommand{\Vcpa}{\Vcal_{\mathrm{CPA}}}
+
+
+\newcommand{\Faff}{\Fcal_{\mathrm{aff}}}
+
+\newcommand{\Fpa}{\Fcal_{\mathrm{PA}}}
+\newcommand{\Fcpa}{\Fcal_{\mathrm{CPA}}}
+
+\newcommand{\NSTEPS}{N_{\mathrm{STEPS}}}
+\newcommand{\nsteps}{n_{\mathrm{steps}}}
+
+
+\newcommand{\SigmaPA}{\Sigma_{\mathrm{PA}}}
+
+\newcommand{\SigmaCPA}{\Sigma_{\mathrm{CPA}}}
+
+
+
+\newcommand{\Vat}[1]{\bv{(#1)}}
+\newcommand{\VatX}{\Vat{\bx}}
+\newcommand{\Tat}[2]{T{(#1,#2)}}
+\newcommand{\Tinvat}[2]{T^{-1}{(#1,#2)}}
+\newcommand{\VatT}[1][t]{\Vat{\Tat{\bx}{#1}}}
+% \newcommand{\VatT}[1][t]{\Vat{\Tat{\bx,#1}}}
+\newcommand{\VatTinv}[1][t]{\Vat{\Tinvat{\bx}{#1}}}
+
+
+\newcommand{\IntVatTofX}[1][t]{\int_{0}^{#1}\VatT[\tau]\, d\tau}
+
+\newcommand{\AtimesX}{A{\bxh}}
+ 
+
+\newcommand{\CpaVatX}{\Ac{\bx}\bxh}
+% \newcommand{\CpaVatT}[1][t]{\Ac{\Tat{\bx}{#1}}\widetilde{T}(\bx,#1)}
+\newcommand{\CpaVatT}[1][t]{\Ac{\Tat{\bx}{#1}}\widetilde{\Tat{\bx}{#1}}}
+
+\newcommand{\IntCpaVatT}[1][t]{\int_{0}^{#1} \CpaVatT[\tau] \, d\tau}
+
+
+ 
+
+\newcommand{\IntCpaVatTinv}[1][t]{\int_{0}^{#1}  \Ac{\Tinvat{\by}{#1}}\widetilde{\Tinvat{\by}{#1}} \, d\tau}
+
+
+\newcommand{\CpaVatXasLinComb}{\sum_{j=1}^{d}\alpha_k\Bc{\bx}^{j}\bxh}
+\newcommand{\CpaVatTasLinComb}[1][t]{\sum_{j}^{d}\alpha_j\Bc{\Tat{\bx}{#1}}^{j}\widetilde{\Tat{\bx}{#1}}}
+
+
+\newcommand{\IntCpaVatTLinComb}[1][t]{\int_{0}^{#1}  \CpaVatTasLinComb[\tau] \, d\tau}
+
+
+% USAGE:
+% $\Vat{\bx}$
+% $\VatX$
+% $\Tat{\bx}{t}$
+% $\VatT$
+% $\VatT[\tau]$
+% $\VatTinv[\tau]$
+% $\IntVatTofX$
+% $\AtimesX$
+% $\Ac{\bx}$
+% $\CpaVatX$
+% $\IntCpaVatT$
+% $\CpaVatXasLinComb$
+% $\IntCpaVatTLinComb$
+
+
+
+%\newcommand{\VEE}[1]{{#1}^{\vee}}
+\newcommand{\VEE}[1]{\mathrm{vec}({#1})}
+
+\newcommand{\HAT}[1]{{#1}^{\wedge}}
+
+ \newcommand{\LCONSTRAINTS}{L_{\mathrm{constraints}}}
+
+% Graph stuff
+\newcommand{\parent}{\text{Pa}}
+\newcommand{\interventions}{\mathcal{I}}
+\newcommand{\alldata}{\mathcal{X}}
+
+% Planning stuff
+\newcommand{\actionset}{\mathcal{A}}

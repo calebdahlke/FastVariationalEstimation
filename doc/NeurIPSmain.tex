@@ -1,0 +1,255 @@
+\documentclass{article}
+
+
+% if you need to pass options to natbib, use, e.g.:
+\PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2022
+
+
+% ready for submission
+\usepackage{neurips_2022}
+\include{packages}
+\include{macros}
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
+%     \usepackage[preprint]{neurips_2022}
+
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+%     \usepackage[final]{neurips_2022}
+
+
+% to avoid loading the natbib package, add option nonatbib:
+%    \usepackage[nonatbib]{neurips_2022}
+
+
+
+
+\title{Fast Variational Estimation of Mutual Information for Implicit and Explicit Likelihood Models}
+
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+
+
+\author{%
+  Caleb Dahlke \\
+  Department of Applied Math\\
+  University of Arizona\\
+  Tucson, USA \\
+  \texttt{calebdahlke@math.arizona.edu} \\
+  % examples of more authors
+  \And
+  Sue Zheng\\
+  Analog Devices \\
+  Cambridge, MA \\
+  \texttt{szheng@csail.mit.edu} \\
+  \AND
+  Jason Pacheco \\
+  Department of Computer Science \\
+  University of Arizona\\
+  ATucson, USA \\
+  \texttt{pachecoj@cs.arizona.edu} \\
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+}
+
+
+\begin{document}
+
+
+\maketitle
+
+
+\begin{abstract}
+  Computing the mutual information (MI) between sets of random
+  variables lacks a closed-form solution in nontrivial
+  models. Variational MI approximations are widely used as flexible
+  estimators for this purpose, but computing these estimators
+  typically requires solving a costly non-convex optimization.  In
+  this paper we demonstrate a class of variational estimators whose
+  solution is not only convex, but efficiently solved via moment
+  matching conditions.  We show that the moment-matched variational
+  estimator provides optimal upper and lower bounds on MI in models
+  with explicit forward models.  Furthermore, we show that the same
+  moment matching solution yields accurate MI approximations in
+  so-called "implicit likelihood models", where the observation
+  likelihood lacks an analytic representation.  In further analysis on
+  implicit likelihood models we prove that our moment matching
+  solution is equivalent to existing gradient based methods but at a
+  significantly reduced computational cost. Our theoretical results
+  are supported by numerical evaluation, showing that the proposed
+  approach elegantly applies to fully parameterized (explicit
+  likelihood) Gaussian mixture models, as well as implicit models
+  arising from marginalization of nuisance variables.  Finally, using
+  the SIR model in epidemiology, we show that our approach easily
+  applies to implicit simulation-based likelihood models, while
+  avoiding costly Likelihood-Free Inference Ratio Estimation (LFIRE)
+  common to such models.
+\end{abstract}
+
+%% OLD ABSTRACT %%
+%% \begin{abstract}
+%% Computing the mutual information (MI) between sets of random variables
+%% lacks a closed-form in nontrivial models.  Variational approximations
+%% provide an efficient mechanism for estimating MI in complex models.
+%% However, the presence of nuisance variables results in an implicit
+%% relationship between the variables of interest, thus prohibiting the
+%% use of most variational MI approximations.  This so-called "implicit
+%% likelihood" model is supported by specialized variational
+%% approximations, but they can be impractical in realistic settings
+%% since they require expensive gradient-based updates.  In this paper we
+%% show loose conditions whereby variational approximations over implicit
+%% likelihood models can be efficiently solved by simple moment matching
+%% operations, thus avoiding the need for costly gradient optimization.
+%% Moreover, we prove that moment matching finds the identical solution
+%% to existing optimization methods at a significantly reduced
+%% computational cost.  We also provide conditions whereby our approach
+%% achieves lower approximation error compared to widely used variational
+%% MI approximations, even when the likelihood is not implicit.  Our
+%% theoretical results are supported by numerical evaluation involving
+%% A/B statistical hypothesis testing and nonlinear sensor selection
+%% state-space models.
+%% \end{abstract}
+
+\section{Introduction}\label{Intro}
+\input{introduction}
+
+\section{Computing and Approximating MI}\label{background}
+\input{background}
+
+\section{Variational MI Estimation}\label{varapprox}
+\input{varapprox}
+
+\section{Moment Matching Variational MI Estimators}\label{varoptim}
+\input{varoptimization}
+
+\section{Previous Work}\label{previousWork}
+\input{prev}
+
+\section{Experiments}\label{experiments}
+\input{experiments}
+
+\section{Discussion}\label{discussion}
+\input{discussion}
+
+
+\bibliography{refs}
+\bibliographystyle{abbrvnat}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Checklist}
+
+
+%%% BEGIN INSTRUCTIONS %%%
+The checklist follows the references.  Please
+read the checklist guidelines carefully for information on how to answer these
+questions.  For each question, change the default \answerTODO{} to \answerYes{},
+\answerNo{}, or \answerNA{}.  You are strongly encouraged to include a {\bf
+justification to your answer}, either by referencing the appropriate section of
+your paper or providing a brief inline description.  For example:
+\begin{itemize}
+  \item Did you include the license to the code and datasets? \answerYes{See Section~\ref{gen_inst}.}
+  \item Did you include the license to the code and datasets? \answerNo{The code and the data are proprietary.}
+  \item Did you include the license to the code and datasets? \answerNA{}
+\end{itemize}
+Please do not modify the questions and only use the provided macros for your
+answers.  Note that the Checklist section does not count towards the page
+limit.  In your paper, please delete this instructions block and only keep the
+Checklist section heading above along with the questions/answers below.
+%%% END INSTRUCTIONS %%%
+
+
+\begin{enumerate}
+
+
+\item For all authors...
+\begin{enumerate}
+  \item Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
+    \answerYes{}
+  \item Did you describe the limitations of your work?
+    \answerYes{}
+  \item Did you discuss any potential negative societal impacts of your work?
+    \answerNA{}
+  \item Have you read the ethics review guidelines and ensured that your paper conforms to them?
+    \answerNA{}
+\end{enumerate}
+
+
+\item If you are including theoretical results...
+\begin{enumerate}
+  \item Did you state the full set of assumptions of all theoretical results?
+    \answerYes{}
+        \item Did you include complete proofs of all theoretical results?
+    \answerYes{Will be included in Apendix.}
+\end{enumerate}
+
+
+\item If you ran experiments...
+\begin{enumerate}
+  \item Did you include the code, data, and instructions needed to reproduce the main experimental results (either in the supplemental material or as a URL)?
+    \answerYes{Will be included in Apendix}
+  \item Did you specify all the training details (e.g., data splits, hyperparameters, how they were chosen)?
+    \answerYes{}
+        \item Did you report error bars (e.g., with respect to the random seed after running experiments multiple times)?
+    \answerYes{}
+        \item Did you include the total amount of compute and the type of resources used (e.g., type of GPUs, internal cluster, or cloud provider)?
+    \answerYes{}
+\end{enumerate}
+
+
+\item If you are using existing assets (e.g., code, data, models) or curating/releasing new assets...
+\begin{enumerate}
+  \item If your work uses existing assets, did you cite the creators?
+    \answerNA{}
+  \item Did you mention the license of the assets?
+    \answerNA{}
+  \item Did you include any new assets either in the supplemental material or as a URL?
+    \answerNo{}
+  \item Did you discuss whether and how consent was obtained from people whose data you're using/curating?
+    \answerNA{}
+  \item Did you discuss whether the data you are using/curating contains personally identifiable information or offensive content?
+    \answerNA{}
+\end{enumerate}
+
+
+\item If you used crowdsourcing or conducted research with human subjects...
+\begin{enumerate}
+  \item Did you include the full text of instructions given to participants and screenshots, if applicable?
+    \answerNA{}
+  \item Did you describe any potential participant risks, with links to Institutional Review Board (IRB) approvals, if applicable?
+    \answerNA{}
+  \item Did you include the estimated hourly wage paid to participants and the total amount spent on participant compensation?
+    \answerNA{}
+\end{enumerate}
+
+
+\end{enumerate}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\appendix
+
+
+\section{Appendix}
+\input{appendix}
+
+
+\end{document}

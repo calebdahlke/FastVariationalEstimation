@@ -1,0 +1,124 @@
+%Why we care about MI
+In this paper we address a fundamental problem of measuring the
+information shared between random quantities.  The focus of this work
+is the \emph{mutual information} (MI), which is key in a diverse range
+of applications.  For example, in Bayesian optimal experiment design
+(BOED)~\cite{lindley56, blackwell50, bernardo79a} MI is used to
+measure the amount of information provided by each hypothesized
+experiment.  Additionally, MI plays a key roll in measuring and
+optimizing the amount of information that can be transmitted along
+noisy communication channels~\cite{Cover2006, mackay2003information}.
+MI plays a key role in optimizing sensor
+configurations~\cite{krause05efficientalgos}, sensor
+selection~\cite{WilliamsThesis}, active
+learning~\cite{settles2012active}, representation
+learning~\cite{tishby2000information}, and many other applications.
+
+% Issues calculating MI
+Despite its broad use, exact calculation of MI is typically not
+possible.  Sample-based estimates of MI can be inefficient both in
+terms of computation and sample complexity.  Such sample-based
+estimators require Nested Monte Carlo (NMC) estimation, which exhibits
+large finite sample bias that decays slowly~\cite{zheng2018robust,
+rainforth2018nesting}. Additionally, straightforward Monte Carlo
+estimation cannot be applied in so-called \emph{implicit likelihood}
+models that lack a closed-form data generating distribution.  Such
+models typically require likelihood-free inference by ration
+estimation (LFIRE)~\cite{thomas2022likelihood}, which can be slow due
+to repeated fitting of generalized linear models (GLMs) in an
+inner-loop~\cite{kleinegesse2021sequential}.
+
+% Variational Methods
+Recent variational approaches provide an appealing alternative to MI
+estimation by recasting the calculation as an optimization
+problem~\cite{poole2019variational}.  Such methods provide convenient
+lower bounds~\cite{agakov2004algorithm}, upper bounds, and even apply
+in the setting of implicit likelihood models~\cite{Foster2019}.  These
+approaches have proven successful in a range of sequential decision
+making tasks~\cite{pacheco2019variational, foster2020unified}.  Yet,
+despite their computational benefits, computing such estimators can
+still be prohibitive due to the underlying non-convex optimization.
+
+%Our Contribution
+In this paper we improve the computational properties of several
+existing variational bounds and approximations to MI.  We show that
+for a class of variational distributions the optimal upper and lower
+bounds on MI can be computed by matching moments of the model.  The
+resulting estimates are equivalent to existing estimators in previous
+work~\cite{poole2019variational, agakov2004algorithm} but we show that
+they can be computed with a fraction of the computation.  Furthermore,
+we consider the case of MI approximation for implicit likelihood
+models.  We show that the same moment matching solution yields
+equivalent estimates to existing work~\cite{Foster2019} and minimizes
+an upper bound on absolute approximation error.  In doing so we unify
+the solution of all three estimators (upper / lower bounds and
+implicit approximation) at a fraction of the computational cost of
+existing methods.  
+
+%Experiment
+We show the accuracy and speed of our approach compared to the
+variational and sample-based estimates in a variety of experiments of
+both \emph{explicit} and \emph{implicit} likelihood models.  We begin
+begin with estimating MI in Gaussian mixtures, for which entropy is
+notoriously difficult to compute~\cite{huber2008entropy}.  Our
+proposed approach yields accurate estimates with computation that is
+capable of scaling to very high-dimensional GMMs.  We then consider
+two implicit likelihood models: one, a variation of the generalized
+linear model (``Extrapolation Experiment'') from Foster et
+al.~(\citeyear{Foster2019}) and the other a simulation-based SIR
+Epidemiological model as explored in~\cite{kleinegesse2021sequential}.
+In all cases we find that our method offers substantial speedup while
+still producing high-quality MI approximations and (when possible) bounds.
+
+%% In this paper, we explore Bayesian inference in the context of
+%% decision making.  We specifically explore on the scenario of Bayesian
+%% optimal experiment design (BOED)~\cite{lindley56}, where decisions are
+%% made to maximize information theortic quantities for a latent variable
+%% of interest. Although there are various measures of information,
+%% Mutual Information (MI) has been a standard use of information utility
+%% (Blackwell, 1950; Bernardo, 1979). It has been used in contexts of
+%% sensor planning~\cite{WilliamsThesis}, active learning~\cite{settles2012active} and
+%% others.\\
+
+
+%% %Issues about MI
+%% MI faces challenges for many models due to the intracablity of exact MI
+%% evaluation. Sample-based estimates of MI can be computationally prohibitive due
+%% to the intractibility of the posterior. A na\"ive approach is Nested Monte 
+%% Carlo (NMC) approximations which requires many samples to achieve 
+%% sufficient accuracy (Rainforth, 2018). Other methods that address the issues of 
+%% NMC (Zhang, 2018), sample-based approximations quickly become challenging for 
+%% high dimensional latent and observation variables.\\
+
+%% %Previous Methods
+%% Alternatives approaches to sample-based estimates include the use of 
+%% variational distributions to bound to bound MI. Variational lower 
+%% (Barber, 2004) or upper bounds on MI (Foster, 2019) however have no guarantees
+%% on the accuracy of their approximation. The bounds are not uniform for each 
+%% setting or even each design, therefore bounds can give evaluate decisions
+%% higher or lower relative to their true information.\\
+
+%% Other approaches consider reformulating the problem to shift from looking at
+%% reducing the uncertainty in the posterior to that estimating the ratio of 
+%% the likelihood and marginal. This approach is call likelihood-free
+%% infrerence by ratio (LFIRE) (Thomas, 2016).\\
+
+%% %Our Contribution
+%% Our approach, considers the use of multiple variational distributions to 
+%% approximate the MI. We show the approach lies between the previous variational
+%% upper and lower bounds which often results in approximations better than either
+%% bound. This approach is also useful in implicit likelihood models as no
+%% evalutaions of the model are needed. Furthermore, we show that moment matching 
+%% is an efficient optimzaion alternative equivalent to gradient based appraches 
+%% for finding optimal variational distributions to both our model as well as the 
+%% variational upper and lower bounds.\\
+
+%% %Experiment
+%% We show the accuracy of our model compared to the variational bounds and the
+%% ground truth in a variety of experiments. We generate a synthetic Gaussian 
+%% Mixture Model distribution for comparison of the variational bounds, our
+%% method and a ground truth. We also consider an extrapolation model 
+%% for comparisons with NMC in the implict likelihood framework. Finally, we 
+%% do paramter estimation for the SIR model for comparison with the LFIRE approach.
+%% In each approach we highlight the computation speed up given by the moment
+%% matching optimization in comparison to the previous gradient based approach.\\

@@ -1,0 +1,61 @@
+To optimize the variational posterior lower bound, $\Ipost$, we must minimize the
+bound gap.
+\begin{equation}\label{eq:PostMin}
+  I(X;Y) \geq \max_{q_p} \, H_p(X) - H_p(q_p(X \mid Y)) = \min_{q_p} \, H_p(q_p(X \mid Y)) + \text{const}
+\end{equation}
+The $H_p(X)$ term is constant in $q_p$ and can be ignored for
+optimization. The maximization on the left is turned into a
+minimization on the right by the negative leading the conditional
+entropy.  \EQN\eqref{eq:PostMin} is optimized by satisfying the following
+condition,
+\begin{lemma}\label{lemma:post_opt}
+  If $q_p(x\mid y)$ takes the form of \EQN\ref{eq:ExpFamCond}, then the minimization
+  of \EQN\eqref{eq:PostMin} is when
+  \begin{equation}\label{eq:OptCrit}
+    \E_{p(y)}\left[\E_{q_p(x\mid y)}\left[T(X,Y)\right]\right]=\E_{p(x,y)}\left[T(X,Y)\right]
+  \end{equation}
+\end{lemma}\vspace*{-2mm}
+This result was also shown previously by Pacheco and
+Fisher~(\citeyear{pacheco2019variational}).  The condition in
+Lemma~\ref{lemma:post_opt} is seemingly a moment matching condition.
+However, the l.h.s.~of \EQN\ref{eq:OptCrit} is an expectation
+w.r.t.~mixed distributions $p(y)q_p(x\mid y)$, and is difficult to satisfy
+in general.  To simplify we consider the joint exponential family
+distribution $q(x,y;\eta)$ with natural parameters $\eta$ and
+conditional given by,
+\begin{equation}\label{eq:ExpFamCond}
+  q_p(x\mid y)=q(x\mid y;\eta)=\dfrac{q(x,y;\eta)}{q(y;\eta)}
+\end{equation}\label{lemma:OptCrit}
+Note that $q(y;\eta)=\int q(x,y;\eta) \, dx$ is not necessarily in the
+exponential family.  We can now show that moment matching joint
+statistics of $q(x,y;\eta)$ yields the optimal $\Ipost$ via the
+following Lemma.
+\begin{lemma}\label{lemma:MMOptCrit}
+  Let $q_p(x\mid y)$ takes the form of \EQN\ref{eq:ExpFamCond}. Further,
+  let the posterior expected statistics be a linear combination of
+  marginal statistics as in,\vspace*{-3mm}
+  \begin{equation}\label{eq:linearY}
+    \E_{q_p(x\mid y)}\left[T(X,Y)\right]=\sum_i^k g_i(\eta)T_{i}(Y)
+  \end{equation}
+  where $T_i(y)$ is the $i^{th}$ component of the joint statistics
+  only depending on  $y$ and $g_i(\eta)$ are arbitrary functions. 
+  Then, the optimal $\Ipost$ is given by joint moment matching:
+  $\E_{p(x,y)}[ T(X,Y) ] = \E_{q(x,y)}[ T(X,Y) ]$. 
+\end{lemma}
+Thus both of these conditions imply that moment matching the joint is
+optimal for \EQN\eqref{eq:PostMin}. Each of these lemmas are written
+in term of an exponential family distribution with some conditions,
+since the multivariate Gaussian is the focus of this paper we need to
+show that it satisfies these conditions
+\begin{corollary}\label{cor:LinearGaussian}
+  Let $q(x, y) = \Ncal(m, \Sigma)$ be a Gaussian. Then $q_p(x \mid y)$
+  is also Gaussian and satisfies conditions of both
+  lemma~\ref{lemma:OptCrit} and lemma~\ref{lemma:MMOptCrit}.
+  Furthermore, the optimal $\Ipost$ is obtained by joint Gaussian
+  moment matching conditions,\vspace*{-2mm}
+  \[
+    m^* = \E_{p(x,y)}\left[ (X,Y)^T \right], \qquad \Sigma^* = \text{Cov}_{p(x,y)}\left((X,Y)^T\right)
+  \]
+  \vspace*{-3mm}And moments of $q_p(x \mid y)$ are the corresponding Gaussian conditional moments
+  of $m^*$ and $\Sigma^*$.
+\end{corollary}

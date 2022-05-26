@@ -1,0 +1,284 @@
+%% Variational estimator optimization requires a family of distributions to be 
+%% optimized over and a method of optimization. In theory, any family can of 
+%% distributions can be chosen but often in partice and in this paper, we will 
+%% restrict ourselves to the exponential family for many of its convenient 
+%% properties. For optimizing within this family, previous work ~\cite{Foster2019}
+%% uses a stochastic gradient approach. We suggest a new technique that is unique
+%% to the exponential family which provides significant computation time saves by 
+%% avoiding expensive gradient steps.
+
+In general, computing the optimal variational estimators
+(e.g. $\Imarg$, $\Ipost$, and $\Iml$) requires solving nonlinear--and
+often nonconvex--optimization problems.  In the following sections we
+demonstrate a class of variational distributions in the exponential
+family that correspond to an efficient convex optimization.
+Specifically, for Gaussian variational distributions the optimal
+estimators can be solved in closed-form by matching expected
+sufficient statistics (means and variances).  The same
+(efficient) moment calculation yields optimal (or optimal bounded)
+estimators for all three cases.  Unless provided, all proofs can be found in the Appendix.
+
+\subsection{Exponential Families}
+\input{exponential_family}
+
+\subsection{Variational Marginal (upper bound)}\label{sec:varmarg_opt}
+\input{variational_marg_opt}
+
+\subsection{Variational Posterior (lower bound)}\label{sec:varpost_opt}
+\input{variational_post_opt}
+
+\subsection{Variational Approximation}\label{sec:varapprox_opt}
+\input{variational_approx_opt.tex}
+
+\subsection{Properties of Variational Estimators}
+\input{variational_properties}
+
+
+% Each variation method has its own error which must be minimized, $\Imarg$ has 
+% an error of $KL(p(x)||q(x))$, $\Ipost$ has an error of $KL(p(x|y)||q(x|y))$, 
+% and $\Iml$ has an error of $KL(p(x)||q(x))-KL(p(x)||q(x))$. Finding the best 
+% approximation $\Iml$ requires minimizing the approximation error,
+% \begin{equation}\label{eq:mi_ml_opt}
+%   \Iml^* = \argmin_{q_m, q_p} \, \left| I(X;Y) - \Iml(q_m, q_p) \right|
+% \end{equation}
+% which cannot be computed in general.  Foster et
+% al.~(\citeyear{Foster2019}) instead minimize an upper bound provided
+% in the following lemma,
+% \begin{lemma}
+%   \label{thm:fosterbound}  
+%   For any model $p(x)p(y|x)$ and distributions $q_m(x)$ and
+%   $q_p(x|y)$, the following bound holds:
+%   {\fontsize{9}{10}\selectfont
+%     \[\left|\widetilde{I}(x,y)-I(x,y)\right|\leq -\E_{p(x,y)}\left[\log q_m(x)+\log q_p(x|y)\right]+C\]}
+%   where $C=-H_p(p(x))-H_p(p(x|y))$ does not depend on $q_m$ or
+%   $q_p$. Further, the RHS is $0$ iff $q_m(x)=p(x)$ and
+%   $q_p(x|y)=p(x|y)$ almost surely.
+%   \label{FosterBound2}
+% \end{lemma}
+% A proof of Lemma~\ref{thm:fosterbound} is reproduced in the appendix. 
+% \paragraph{Optimization methods} suggested by previous work ~\cite{Foster2019} is
+% \emph{stochastic gradient descent}.
+% \begin{equation}\label{eq:sgd_opt}
+%   q_m^* = \argmax_{q_m} \E_{p(x,y)}[log(q_m(x))]\hspace{2em}  q_p^* = \argmax_{q_p} \E_{p(x,y)}[log(q_p(x|y))]
+% \end{equation}
+% Lemma ~\ref{thm:fosterbound} is found by seperately finding $q_m^*$ and $q_p^*$ by 
+% equation \ref{eq:sgd_opt}. For $\Imarg$, the optimal distribution is found by 
+% just finding $q_m^*$ and the optimal distribution for $\Ipost$ is just $q_p^*$.
+
+
+% \subsection{Optimizing $\Iml$}
+% To minimize the bound in Lemma~\ref{thm:fosterbound}, an optimal 
+% marginal, $q_m$ and posterior, $q_p$, must be found.
+
+% \subsubsection{Stochastic Gradient Descent}
+% Previous work suggests finding the maximum by separately optimizing a Gaussian 
+% marginal $q(x)=q_m(x)$ and Gaussian posterior $q(x|y)=q_p(x|y)$ though stochastic 
+% gradient ascent. That is he separately calculates the following:
+% \begin{equation}\label{eq:sgd_opt}
+%   q_m^* = \argmax_{q_m} \E_{p(x,y)}[log(q_m(x))]\hspace{2em}  q_p^* = \argmax_{q_p} \E_{p(x,y)}[log(q_p(x|y))]
+% \end{equation}
+% It is important to note that this does not assume that $q_m(x)$ and $q_p(x|y)$ share 
+% a joint Gaussian, $q(x,y)$, that they are both derived from. This approach will 
+% find our optimal distribution to minimize the bound in Lemma~\ref{thm:fosterbound} 
+% however this requires two optimization operations to be computed which can be 
+% time consuming, especially with higher dimensional problems.
+
+% \subsubsection{Moment Matching}
+% The method proposed in this paper, instead of computing Gradient Descent, we will
+% match the moments of $q(x,y)$ to those of $p(x,y)$. To define what this means, 
+% we first intrduce the \emph{Exponential Family}
+% \begin{definition}{Exponential Family}\\
+%   \emph{
+%   A distribution is a member of the Exponential Family if it's probability 
+%   density function can be expressed in the form
+%   \[f(x,y|\theta) = h(x,y) \exp \left[\eta(\theta)^TT(x,y)-A(\theta)\right]\]
+%   where $\theta$ are the parameters, $\eta(\theta)$ is the 
+%   Natural Parameters, $h(x,y)$ is the base measure, $T(x,y)$ is the sufficient 
+%   statistics, and $A(\theta)$ is the Log-partition.}
+%   \end{definition}
+% There are many common distributions that fall into this family such as 
+% the Bernoulli distribution, Chi-squared distribution, Wishart distribution, 
+% Gaussian distribution, and many others. The case of the Multivariate Gaussain
+% will be the focus of this paper but results can be expanded to include other 
+% distributions from the exponential family as well.
+
+% Let $q(x,y)$ be in the Exponential Family. Then \emph{Moment Matching} is
+% \begin{equation}
+% \E_{p(x,y)}[T(x,y)]=\E_{q(x,y)}[T(x,y)]
+% \end{equation}
+% and the resulting marginal and likelihood are used as the approximating distributions
+% \begin{align}\label{eq:mm_opt}
+% q_m^*(x)=q_\eta(x)=\int q_\eta(x,y)dy \hspace{2em} q_p^*(x|y)=q_\eta(x|y)=\dfrac{q_\eta(x,y)}{\int q_\eta(x,y)dx}
+% \end{align}
+% In this paper, we will focus on the case where $q(x,y)$ is the Multivariate 
+% Gaussiian in the exponential family. Figure ~\ref{fig:GMMex} shows an example of 
+% a Gaussian Mixture Model, $p(x,y)$, with a moment matched variational Gaussian, 
+% $q(x,y)$. Notice that the moment matching finds the mean of the nodes and then 
+% matches the varaiance to capture both nodes. This Gaussian is then used as the 
+% variational distribution for each of the variational methods and their outputs 
+% compared. The ordering of each method matches Lemma ~\ref{lemma:MIOrder}.
+% We will show that for Gaussian variational families, the optimal $q_m$ 
+% and $q_p$ found in equation \ref{eq:sgd_opt} share a unique optimal joint. 
+% We further show that the optimal joint distribution is given by moment matching.
+% \begin{figure*}[!htb]
+%   \centering
+%   \subfigure[Joint pdf contour]{
+%   \includegraphics[width=.33\textwidth]{GMMContour.pdf}
+%   }
+%   \subfigure[Marginal pdf]{
+%   \includegraphics[width=.33\textwidth]{GMMpdf.pdf}
+%   }
+%   \subfigure[MI approximations]{
+%   \includegraphics[width=.29\textwidth]{GMMbar.pdf}
+%   }
+%   \caption{\small\textbf{Moment Matched Gaussian Mixture Model} (a) A Gaussian Mixture 
+%   Model with two means is plotted and its level curves. The moment matched 
+%   Gaussian has its one standard deviation level curve plotted on top in red. (b)
+%   The marginal pdf of the Latent Variable is plotted for the Gaussian Mixture 
+%   Model and the moment matched Gaussian. The Gaussian is mean-seeking instead 
+%   of mode seeking (c) The True $I(X,Y)$, $\Imarg(X,Y)$, $\Ipost(X,Y)$, and 
+%   $\Iml(X,Y)$ are all plotted. Notice that $\Imarg(X,Y)\geq\Iml(X,Y)\geq\Ipost(X,Y)$ 
+%   as expected.}
+%   \label{fig:GMMex}
+%   \end{figure*}
+
+% \subsubsection{Equivalence of Methods}
+% We first show that there exists a shared joint, $q(x,y)$, that generates 
+% both $q_m$ and $q_p$. If this holds, then the stochastic gradient decent 
+% approach can be reduced from minimzing two distribution to just one.\\
+
+% \begin{lemma}{Uniqueness of Multivariate Gaussian}\\
+%   For any linear conditional Gaussian variation distribution of the form 
+%   $q(X|y)=N(Ay+b|\Sigma)$ where $\Sigma$ is independent of $y$, then there exists a 
+%   unique joint Gaussian, $q(x,y)$, for any Gaussian marginal distribution $q(x)$.
+%   \label{UniqueGaussian}
+% \end{lemma}
+% This tells us the assumption of $q_m$ and $q_p$ not sharing a joint Gaussian 
+% is unnecessary as there exists a unique joint Gaussian that will produce any 
+% separate $q_m$ and $q_p$. This reformulates equation ~\ref{eq:sgd_opt} To
+% \begin{equation}
+%   q^*(x,y) = \argmax_{q(x,y)}\left(\E_{p(x)}[\log(q(x))]+\E_{p(x,y)}(\log(q(x|y)))\right)
+% \end{equation}
+
+% \begin{theorem}{Equivalence of Moment Matching and Gradient Methods for Variational Gaussian}\\
+%   Let $q_\eta(x,y)=N(\mu,\Sigma)$, $q_\eta(x)=\int q_\eta(x,y)dy$, 
+%   and $q_\eta(x|y)=\dfrac{q_\eta(x,y)}{q_\eta(y)}$, where $\eta$ are the exponential 
+%   family parameters of the joint Gaussian and $T(x,y)$ are the sufficient statistics. Then
+% \[\E_{p(x,y)}[T(x,y)]=\E_{q(x,y)}[T(x,y)]\]
+%   finds the same minimum as gradient ascent of
+%   \[-\E_{p(x,y)}\left[log(q_\eta(x))+log(q_\eta(x|y))\right]\]
+%   \label{EquivMethodsGauss}
+% \end{theorem}
+
+% The proof of Theorem \ref{EquivMethodsGauss} can be found in the appendix.\\ 
+% Theorem~\ref{UniqueJoint} and Theorem~\ref{EquivMethodsGauss} together tell us 
+% that if we are working with a Multivariate Gaussian variational distribution, 
+% then Moment Matching is equivalent to Gradient Descent for minimizing the bound 
+% in Theorem~\ref{thm:fosterbound}.\\
+
+% \subsection{Properties of Variational Estimators}
+% The $\Imarg$ and $\Ipost$ have nice properties that we can bound them relative 
+% to the True MI. $\Iml$, on the other hand, is neither an upper bound or lower 
+% bound due to bounding both entropy terms. However this approximation can be placed
+% between the Variational Marginal and Variational Posterior bounds.\\
+% \begin{lemma}
+%   For any variational distributions $q_m(x)$ and $q_p(x|y)$, the following holds
+%   \[\Ipost\leq\Iml\leq\Imarg\]
+%   \label{lemma:MIOrder}
+% \end{lemma}
+% The proof of this lemma can be found in the appendix. However it is simple to see 
+% that this must be true. The error of equation \ref{eq:mi_marg} is $KL(p(x)||q(x))$
+% and the error of equation \ref{eq:mi_ml} is $KL(p(x)||q(x))-KL(p(x|y)||q(x|y))$ 
+% which is error of the variational marginal minus a postive KL Divergence, 
+% making it smaller than the upper bound. A similar argument holds to show that
+% $\Iml$ is larger than the lower bound. \\
+% Lemma ~\ref{lemma:MIOrder} always holds regardless of the model, however we can 
+% ask when $\Iml$ is closer in absolute error to the true MI than either of the 
+% bounds. Consider $\Ipost$, which has error $KL(p(x|y)||q(x|y))$
+% \begin{equation}\label{eq:AbsPostError}
+%   \left|KL(p(x|y)||q(x|y))\right|\geq \left|KL(p(x)|q(x))-KL(p(x|y)||q(x|y))\right| \Rightarrow 2KL(p(x|y)||q(x|y))\geq KL(p(x)||q(x))
+% \end{equation}
+% Equation ~\ref{eq:AbsPostError} shows us that $\Iml$ is closer in absolute error 
+% to the true MI than $\Ipost$ if $2KL(p(x|y)||q(x|y))\geq KL(p(x)|| q(x))$. 
+% Following a similar argument, $\Iml$ is close to the true MI than $\Imarg$ If
+% $2KL(p(x)||q(x))\geq KL(p(x|y)||q(x|y))$. Neither of these conditions can be 
+% checked in practice as True entropy terms need to be calculated to evalute these
+% KL divergences, however this can be used to make Hueristic arguments for when $\Iml$ 
+% is a good approximation. If $q(x)$ approximates $p(x)$ about as well as $q(x|y)$ 
+% approximated $p(x|y)$, then $\Iml$ is better to use in all cases.\\
+% \begin{figure*}[!htb]
+%   \centering
+%   \subfigure[Local minimum]{
+%     \includegraphics[width=.31\textwidth]{MMMinimum.pdf}
+%     }
+%   \subfigure[Local maximum]{
+%   \includegraphics[width=.31\textwidth]{MMMaximum.pdf}
+%   }
+%   \caption{\small\textbf{Moment Matched Optimum} (a) In this case, a GMM is MM and then
+%   the value of $\rho$ is varied. The Moment matching solution (red), is the local
+%   minimum and no better values of $\rho$ exist. (b) Another GMM is MM, in this case
+%   the moment matched solution finds a local maximum and there is a range of values
+%   for $\rho$ that result in better approximation, and two that result in exact 
+%   values of MI.}
+%   \label{fig:MMoptimal}
+%   \end{figure*}
+% Another interesting property to note is that Moment Matching does not always find 
+% a local minimum to the optimization of the variational distribution. Conisder 
+% Figure ~\ref{fig:MMoptimal} where Gaussian Mixture Models are moment matched to a
+% Gaussian. All of the paramters of the Moment Matched Gaussian is held constant but
+% the correlation parameter, $\rho$, is plotted versus the absolute error to the True
+% MI. In one case, the minimum is found and any changed value of $\rho$ results in a
+% worse approximation of MI. However is the second case, a local maximum is found, 
+% and we notice that there is a range of values for $\rho$ that result in not only
+% better approximations of MI, but sometimes exact.\\
+
+% \subsection{Optimizing $\Imarg$ and $\Ipost$}
+% We now observe how to optimize Equation \ref{eq:mi_marg} and \ref{eq:mi_post}.
+% Previously, the optimal distribution was found by minimizing the error $KL(p||q)$
+% via a stochastic gradient methods, however, appealing to distributions in the 
+% Exponential Family, this optimiziaiton can be simplified
+% \begin{theorem}{Moment Matching Minimizes KL}
+%   For any distribution, $p(x,y)$, and a Gaussian variational distribution, $q(x,y)$, 
+%   the KL divergence, $KL(p(x)||q(x))$ and $KL(p(x|y)||q(x|y))$, are minimized 
+%   by moment matching the joint.
+%   \[E_p[T(x,y)]=E_q[T(x,y)]\]
+%   \label{th:KLMin}
+% \end{theorem}
+% Because $\Imarg$ has an error of $KL(p(x)||q(x))$ and $\Ipost$ has an error 
+% of $KL(p(x|y)||q(x|y))$, Moment Matching a Gaussian variational distribution 
+% will minimze the $KL$ error of both methods and thus optimize the Variational 
+% Marginal and Variational Posterior bounds. This means that when we moment match 
+% a joint Gaussian, the resulting distribution will optimize $\Imarg$, $\Ipost$, 
+% and $\Iml$ at the same time.
+
+% \subsection{Generalize Proofs of Optimization}
+% The results of Theorem \ref{UniqueGaussian} and Theorem \ref{EquivMethodsGauss}
+% can be extended to include more general distributions as well. Theorem 
+% \ref{UniqueGaussian} is extended in Seshadri and Patil \ref{SeshadriPatil}
+
+% \begin{theorem}{Unique Joint Condition}\\
+%   Given $f_x(x)$ and $f_{x|y}(x|y)$, a sufficient condition for
+%   $f_y(y)$ (and hence for $f_{x,y}(x,y)$) to be unique is that the
+%   conditional p.d.f. of $x$ given $y$ is of the exponential form
+%   \[f_{x,y}(x|y)=exp\left[yA(x)+B(x)+C(y)\right]\]
+%   where an interval is contained in the range of $A(x)$.
+%   \label{UniqueJoint}
+% \end{theorem}
+
+% This generalizes the conditional distribution form being a linear Gaussian to 
+% simply being in the exponential family and having a cross term tha tis linear 
+% in $y$.\\
+% Theorem \ref{EquivMethodsGauss} can be extend to further include other member of
+% the exponential family.
+% \begin{theorem}{Equivalence of Moment Matching and Stochastic Gradient Descent}
+%   Let $q_m(x)$ and $q_p(x|y)$ share a common joint in the exponential family,
+
+%   \[q_\eta(x,y)=h(x,y) \exp \left[\eta^TT(x,y)-A(\eta)\right]\]
+
+%   Also assume linear conditional expectations of the sufficient statistics
+
+%   \[\E_{q(x|y)}\left[T(x,y)\right]=\sum g_i(\eta)T_i(y)\hspace{2em} \E_{q(y|x)}\left[T(x,y)\right]=\sum h_i(\eta)T_i(x)\]
+
+%   Then Moment Matching finds the same minimum as gradient ascent of Theorem \ref{thm:fosterbound}.
+%   \label{EquivMethods}
+% \end{theorem}

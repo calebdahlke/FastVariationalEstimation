@@ -1,0 +1,34 @@
+We demonstrate efficacy and efficiency of our moment matching
+variational MI estimators in a range of experiments beginning with a
+Gaussian mixture model (\SEC\ref{sec:gmm}).  We then evaluate two
+implicit likelihood models: one arising from the non-closed-form
+marginalization of nuisance variables in a GLM
+(\SEC\ref{sec:extrapolation}), and the other is a simulation-based SIR
+epidemiology model (\SEC\ref{sec:sir}).  In all cases we find that the
+proposed moment matching estimators offer substantial computational
+speedups while achieving identical MI bounds and approximations to
+existing methods.
+
+%% A variety of experiments are used to demonstrate the efficiency of the 
+%% Moment Matching of the Implicit Likelihood approximation compared to a 
+%% variety of other approaches. The experiments chosen are joint 
+%% multivariate Gaussian Mixture Model, and implicit extrapolation setting,
+%% and SIR parameter estimation. We demonstrate two major takeaways. First, 
+%% Moment Matching is substantially faster than Gradient based approaches 
+%% for finding optimal variational distributions and second, we show that 
+%% the Implicit Likelihood approximation does not sacrifice accuracy of 
+%% approximation compared to Variational Posterior or Variational Marginal, 
+%% which assumes exact marginal entropy or exact posterior calculation, 
+%% respectively.
+
+% \subsection{A/B Test}
+% \input{AB_experiment}
+
+\subsection{Multivariate Gaussian Mixture Model}\label{sec:gmm}
+\input{GMM_experiment}
+
+\subsection{Extrapolation}\label{sec:extrapolation}
+\input{extrap_experiment}
+
+\subsection{SIR Epidemic Model}\label{sec:sir}
+\input{sir_experiment}

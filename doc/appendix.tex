@@ -1,0 +1,280 @@
+The sections below provide all proofs for results in the main text.
+
+%%%%%% Section 4.3 Proofs %%%%%%%%
+\renewcommand\thetheorem{4.3}
+\begin{lemma}
+    If $q_p(x\mid y)$ takes the form of \EQN\eqref{eq:ExpFamCond}, then the minimization
+    of \EQN\eqref{eq:PostMin} is when
+    \begin{equation}
+      \E_{p(y)}\left[\E_{q_p(x\mid y)}\left[T(X,Y)\right]\right]=\E_{p(x,y)}\left[T(X,Y)\right]
+    \end{equation}
+  \end{lemma}
+\begin{proof}
+    The goal is to minimize $H_p(q_p(X|Y))$ where $q_p(x|y)$ is 
+    generated from $q(x,y;\eta)$ in the exponential family. We will find the 
+    minimizing parameters of this distributions. We appeal to the property of 
+    exponential families that $\frac{\partial}{\partial\eta}A(\eta)=\E_{q(x,y)}\left[T(x,y)\right]$
+    \begin{align}
+        \dfrac{\partial}{\partial\eta}&\left(H_p(q_p(X|Y))\right)=
+        -\dfrac{\partial}{\partial\eta}\int p(x,y)\log\left(q_p(X|Y)\right)=-\int p(x,y)\dfrac{\partial}{\partial\eta}\log\left(\dfrac{q(X,Y;\eta)}{q(Y;\eta)}\right)\\
+        =&-\int p(x,y)\dfrac{\partial}{\partial\eta}\left(\log(h(x,y))
+          +\eta^TT(x,y)-A(\eta)-\log\left(q(y;\eta)\right)\right)dxdy           \\
+        =&-\int p(x,y)\left(T(x,y)-\dfrac{\partial}{\partial\eta}A(\eta)-\dfrac{\partial}{\partial\eta}\log\left(q(y;\eta)\right)\right)dxdy\\
+        =&-\E_{p(x,y)}\left[T(x,y)\right]+\E_{q(x,y)}\left[T(x,y)\right]+
+        \notag \\
+        &\qquad \qquad \int p(x,y)\dfrac{1}{q(y;\eta)}\dfrac{\partial}{\partial\eta}\left(\int h(x',y)\exp\left(\eta^TT(x',y)-A(\eta)\right)dx'\right)dxdy\\
+        =&-\E_{p(x,y)}\left[T(x,y)\right]+\E_{q(x,y)}\left[T(x,y)\right]+
+        \notag \\
+        &\qquad \qquad \int p(x,y)\dfrac{1}{q(y;\eta)}\left(\int q(x',y;\eta)\left(T(x',y)-\dfrac{\partial}{\partial\eta}A(\eta)\right)dx'\right)dxdy\\
+        =&-\E_{p(x,y)}\left[T(x,y)\right]+\E_{q(x,y)}\left[T(x,y)\right]+
+        \notag \\
+        &\qquad\qquad \int p(x,y)\left(\int q(x'|y)\left(T(x',y)-\E_{q(x,y)}\left[T(x,y)\right]dx'\right)dxdy\right)\\
+        =&-\E_{p(x,y)}\left[T(x,y)\right]+\E_{p(y)}\left[\E_{q_p(x|y)}\left[T(x,y)\right]\right]\\
+    \end{align}
+    The zero derivative yields the stationary condition
+    \mbox{$\E_{p(x,y)}\left[T(x,y)\right]=\E_{p(y)}\left[\E_{q_p(x|y)}\left[T(x,y)\right]\right]$}. It
+    now remains to show that the objective is concave in $\eta$.
+    Expanding the form of $H_p(q(X\mid Y))$ we have the objective,
+    \begin{equation}
+      \min_\eta \, - \E_p\left[ \log(h(X,Y)) + \eta^TT(X,Y) - A(\eta)
+        - \log( q(Y;\eta) ) \right]
+    \end{equation}
+    The term $\eta^T T(X,Y)$ is linear in $\eta$.  Convexity of
+    $A(\eta)$ in $\eta$ is a standard property of the exponential
+    family, however will show a constructive proof that $A(\eta) +
+    \log(q(y;\eta))$ is convex using H\"older's inequality.  Let $\eta
+    = \lambda \eta_1 + (1-\lambda) \eta_2$ where $\lambda \in [0,1]$
+    and $\eta_1, \eta_2$ in the convex set of valid exponential family
+    parameters of $q$ then:
+    \begin{align}
+      &A(\eta) + \log(q(y;\eta)) = A(\eta) + \log\left( \int h(x,y)
+      \exp( \eta^T T(x,y) - A(\eta)) \, dx \right) \\
+      &\quad = A(\eta) + \log\left( \exp(-A(\eta)) \int h(x,y)
+      \exp(\eta^T T(x,y)) \, dx \right) \\
+      &\quad = \log \left( \int h(x,y) \exp(\eta^T T(x,y)) \, dx
+      \right) \\
+      &\quad =\log \left( \int(h(x,y)\exp(\eta_1^T T(x,y)))^\lambda
+      \, (h(x,y)\exp(\eta_2^T T(x,y)))^{(1-\lambda)} \, dx \right) \\
+      &\quad \leq \lambda \log \left( \int h(x,y) \exp(\eta_1^T T(x,y)) \, dx
+      \right) + (1-\lambda) \log \left( \int h(x,y) \exp(\eta_2^T
+      T(x,y)) \, dx \right) \\
+      &\quad = \lambda(A(\eta_1) + \log q(y;\eta_1)) +
+      (1-\lambda)(A(\eta_2) + \log q(y;\eta_2))
+    \end{align}
+    Thus convexity holds in $\eta$ and the stationary conditions
+    \mbox{$\E_{p(x,y)}\left[T(x,y)\right]=\E_{p(y)}\left[\E_{q_p(x|y)}\left[T(x,y)\right]\right]$}
+    are globally optimal.
+\end{proof}
+
+\renewcommand\thetheorem{4.4}
+\begin{lemma}
+    Let $q_p(x\mid y)$ take the form of \EQN\eqref{eq:ExpFamCond}. Further,
+    let the posterior expected statistics be a linear combination of
+    marginal statistics as in,
+    \begin{equation}\label{eq:linear_exp_stats}
+      \E_{q_p(x\mid y)}\left[T(X,Y)\right]=\sum_i^k g_i(\eta)T_{i}(Y)
+    \end{equation}
+    where $T_i(y)$ is the $i^{th}$ component of the joint statistics
+    only depending on  $y$ and $g_i(\eta)$ are arbitrary functions. 
+    Then, the optimal $\Ipost$ is given by joint moment matching:
+    $\E_{p(x,y)}[ T(X,Y) ] = \E_{q(x,y)}[ T(X,Y) ]$. 
+  \end{lemma}
+\begin{proof}
+    From Lemma ~\ref{lemma:post_opt}, we know that
+    $\E_{p(x,y)}\left[T(x,y)\right]=\E_{p(y)}\left[\E_{q_p(x|y)}\left[T(x,y)\right]\right]$
+    is the optimality condition. Let us now show that the condition in
+    \EQN\eqref{eq:linearY} implies that joint moment matching satisfies
+    the optimality condition of \EQN\eqref{eq:OptCrit}
+    \begin{align}
+      \E_{p(x,y)}\left[T(x,y)\right]=&\E_{p(y)}\left[\E_{q_p(x|y)}\left[T(x,y)\right]\right]=\E_{p(y)}\left[\sum_i^k g_i(\eta)T_{i}(y)\right]\\
+      =&\sum_i^k g_i(\eta)\E_{p(y)}\left[T_{i}(y)\right]=\sum_i^k g_i(\eta)\E_{q(y)}\left[T_{i}(y)\right]\\
+      =&\E_{q(y)}\left[\sum_i^k g_i(\eta)T_{i}(y)\right]=E_{q(y)}\left[\E_{q_p(x\mid y)}\left[T(x,y)\right]\right]\\
+      =&\E_{q(x,y)}\left[T(x,y)\right]
+    \end{align}
+So with Lemma ~\ref{lemma:post_opt} and the assumption of the posterior expected 
+statistics being a linear combination of marginal statistics (\EQN\eqref{eq:linear_exp_stats}) results in 
+$\E_{p(x,y)}[ T(X,Y) ] = \E_{q(x,y)}[ T(X,Y) ]$ being the optimal conditions.
+\end{proof}
+
+\renewcommand\thetheorem{4.5}
+\begin{corollary}
+    Let $q(x, y) = \Ncal(m, \Sigma)$ be a Gaussian. Then $q_p(x \mid y)$
+    is also Gaussian and satisfies conditions of both
+    Lemma~\ref{lemma:OptCrit} and Lemma~\ref{lemma:MMOptCrit}.
+    Furthermore, the optimal $\Ipost$ is obtained by joint Gaussian
+    moment matching conditions,\vspace*{-2mm}
+    \[
+      m^* = \E_{p(x,y)}\left[ (X,Y)^T \right], \qquad \Sigma^* = \text{Cov}_{p(x,y)}\left((X,Y)^T\right)
+    \]
+    \vspace*{-3mm}And moments of $q_p(x \mid y)$ are the corresponding Gaussian conditional moments
+    of $m^*$ and $\Sigma^*$.
+  \end{corollary}
+\begin{proof}
+    We first see the conditions of Lemma ~\ref{lemma:OptCrit} are satisfied by the
+    setup of the problem as 
+    \[q_p(x \mid y)=\dfrac{q(x,y)}{q(y)}\]
+    It suffices to verify the assumption of the posterior 
+    expected statistics being a linear combination of marginal
+    statistics (\EQN\eqref{eq:linear_exp_stats}) is satisfied.
+    Recall the sufficient statistics of a multivariate Gaussian
+    \[T(x,y)=\begin{bmatrix}
+      x\\
+      y\\
+      \text{vec}(xx^T)\\
+      \text{vec}(xy^T)\\
+      \text{vec}(yy^T)
+    \end{bmatrix}\]
+    In this case $T_1(y)=y$ and $T_2(y)=\text{vec}(yy^T)$. We now
+    verify that the expected value under $q(x|y)$ of each term in the
+    sufficient statistic is a linear function of $T_1(y)$ and $T_2(y)$
+    \begin{enumerate}
+      \item $x$
+      \[\E_{q(x|y)}\left[x\right]=\mu_{x|y}=\mu_x+\Sigma_{xy}\Sigma_{yy}^{-1}(y-\mu_y)\]
+      \item $y$
+      \[\E_{q(x|y)}\left[y\right]=y\]
+      \item $xx^T$
+      \begin{align*}
+      \E_{q(x|y)}\left[xx^T\right]=&\Sigma_{x|y}+\mu_{x|y}\mu_{x|y}^T\\
+      =&\Sigma_{xx}-\Sigma_{xy}\Sigma_{yy}\Sigma_{xy}^T+(\mu_x+\Sigma_{xy}\Sigma_{yy}^{-1}(y-\mu_y))(\mu_x+\Sigma_{xy}\Sigma_{yy}^{-1}(y-\mu_y))^T\\ 
+      =&\Sigma_{xx}-\Sigma_{xy}\Sigma_{yy}\Sigma_{xy}^T+\mu_x\mu_x^T+\dots\\
+      &\mu_x(y-\mu_y^T)\Sigma_{yy}^{-1}\Sigma_{xy}^T+\Sigma_{xy}\Sigma_{yy}^{-1}(y-\mu_y)\mu_x+\dots\\
+      &\Sigma_{xy}\Sigma_{yy}^{-1}(y-\mu_y)(y-\mu_y)^T\Sigma_{yy}^{-1}\Sigma_{xy}^T  
+      \end{align*}
+      \item $xy^T$
+      \begin{align*}
+      \E_{q(x|y)}\left[xy^T\right]=&(\mu_x+\Sigma_{xy}\Sigma_{yy}^{-1}(y-\mu_y))y^T\\
+      =& (\mu_x-\Sigma_{xy}\Sigma_{yy}^{-1}\mu_y)y^T+\Sigma_{xy}\Sigma_{yy}^{-1}yy^T
+      \end{align*}
+      \item $yy^T$
+      \[\E_{q(x|y)}\left[yy^T\right]=yy^T\]
+    \end{enumerate}
+    So the statistics are linear functions of $T_1(y)=y$ and $T_2(y)=yy^T$
+    so $p(x|y)$ satisfies the conditions of Lemma ~\ref{lemma:MMOptCrit} and 
+    moment matching the joint $q(x, y) = \Ncal(m, \Sigma)$ yields the optimal
+    $\Ipost$.  
+\end{proof}
+
+
+
+%%%%%% Section 4.4 Proofs %%%%%%%%
+\renewcommand\thetheorem{4.6}
+\begin{lemma}
+    For any model $p(x,y)$ and distributions
+    $q_m(x)$, $q_p(x\mid y)$, the following bound holds:
+    {\fontsize{9}{10}\selectfont \[\left|\Iml(X,Y)-I(X,Y)\right|\leq
+    -\E_{p(x,y)}\left[\log q_m(X)+\log q_p(X\mid Y)\right]+C\]} where
+    $C=-H_p(p(X))-H_p(p(X\mid Y))$ does not depend on $q_m$ or
+    $q_p$. Further, the RHS is $0$ iff $q_m(x)=p(x)$ and $q_p(x\mid
+    y)=p(x\mid y)$ almost surely. 
+  \end{lemma}
+\begin{proof}
+  We reproduce the proof from Foster et al \cite{Foster2019}.
+    \begin{align}
+        \left|\Iml(X,Y)-I(X,Y)\right|=&\left|H_p(q_m(X))-H_p(q_p(X|Y))-H_p(p(X))+H_p(p(X|Y))\right|\\
+        =&\left|-H_p(p(X))+H_p(q_m(X))+H_p(p(X|Y))-H_p(q_p(X|Y))\right|\\
+        =&\left|\KL{p(X)}{q_m(X)}-\KL{p(X|Y)}{q_p(X|Y)}\right|\\
+        \leq&\left|\KL{p(X)}{q_m(X)}\right|+\left|\KL{p(X|Y)}{q_p(X|Y)}\right|\\
+        =&-H_p(p(X))+H_p(q_m(X))-H_p(p(X|Y))+H_p(q_p(X|Y))\\
+        =& -\E_{p(x,y)}\left[\log q_m(X)+\log q_p(X\mid Y)\right]+C
+    \end{align}
+    Where $C=-H_p(p(X))-H_p(p(X\mid Y))$.
+\end{proof}
+
+\renewcommand\thetheorem{4.7}
+\begin{theorem}{Equivalence of Moment Matching and Stochastic Gradient Descent}\\
+    Let $q_m(x)$ and $q_p(x\mid y)$ be exponential family.  Further, let
+    $q_p(x\mid y)$ satisfy the form of \EQN\eqref{eq:ExpFamCond} and the
+    linear conditional expectations property (\EQN\eqref{eq:linearY}).
+    Then, moment matching the joint distribution $q(x,y)$ yields optimal
+    $q_m$ and $q_p$ that minimize the bound on $\Iml$ in
+    Lemma \ref{thm:fosterbound}.
+  \end{theorem}
+\begin{proof}
+    We break this down into the two cases of Lemma ~\ref{lemma:VMMM}
+    and Lemma ~\ref{lemma:MMOptCrit}.  Notice that the variational
+    distributions $q_m(x)$ and $q_p(x \mid y)$ need not share a common joint
+    $q(x,y)$.  So, let us use different natural parameters, $\eta_1$
+    and $\eta_2$, for each (i.e. $q_m(x)=q(x;\eta_1)$ and
+    $q_p(x|y)=q(x|y;\eta_2)$). We optimize the bound in
+    Lemma \ref{thm:fosterbound} with respect to both natural
+    parameters, beginning with $\eta_1$:
+    \[\dfrac{\partial}{\partial \eta_1}\left(-\E_{p(x,y)}\left[\log q(x;\eta_1)+\log q(x\mid y;\eta_2)\right]+C\right)=-\dfrac{\partial}{\partial \eta_1}E_{p(x,y)}\left[\log q(x;\eta_1)\right]\]
+    This is exactly the condition in Lemma ~\ref{lemma:VMMM} which we know is 
+    solved by moment matching the joint. Likewise, for $\eta_2$:
+    \[\dfrac{\partial}{\partial \eta_2}\left(-\E_{p(x,y)}\left[\log q(x;\eta_1)+\log q(x\mid y;\eta_2)\right]+C\right)=-\dfrac{\partial}{\partial \eta_2}E_{p(x,y)}\left[\log q(x\mid y;\eta_2)\right]\]
+    The above is the condition in Lemma~\ref{lemma:post_opt} and along with \EQN\eqref{eq:linearY} 
+    in Lemma~\ref{lemma:MMOptCrit}, we get that moment matching the joint finds 
+    the optimal $q_p$. Therefore, the optimization of Lemma \ref{thm:fosterbound} simply reduces
+    to moment matching the joint.
+\end{proof}
+
+\renewcommand\thetheorem{4.8}
+\begin{corollary}
+    Let $q_m(x)=\Ncal(m,S)$ and $q_p(x\mid y)=\Ncal(Ay+b,\Sigma_p)$. Then theorem 
+    ~\ref{EquivMethods}  is satisfied and thus moment matching a Joint Gaussian 
+    $q(x,y)=\Ncal(\mu, \Sigma)$ will minimize Lemma~\ref{thm:fosterbound}.
+  \end{corollary}
+\begin{proof}
+    This Corollary holds by Corollary \ref{cor:LinearGaussian} to shows $q(x, y)$ satisfies the
+    linear conditional expectation property and then the Lemma ~\ref{EquivMethods} applies.
+\end{proof}
+
+
+
+%%%%%% Section 4.5 Proofs %%%%%%%%
+\renewcommand\thetheorem{4.9}
+\begin{lemma}
+    For any $q_m(x)$ and $q_p(x\mid y)$, $\Ipost\leq\Iml\leq\Imarg$.
+    \label{lemma:MIOrder}
+  \end{lemma}
+\begin{proof}
+    We prove the lower bound on $\Iml$ first and then the upper\\
+$1)$ $\Ipost\leq\Iml$
+    \begin{align*}
+    \Ipost =& H_p(p(x))-H_p(q(x\mid y))\leq H_p(p(x))-H_p(q(x\mid y))+\KL{p(x)}{q(x)}\\
+    =& H_p(p(x))-H_p(q(x\mid y))-H_p(p(x))+H_p(q(x)) = H_p(q(x))-H_p(q(x\mid y))=\Iml
+    \end{align*}
+
+$2)$ $\Imarg\geq\Iml$
+    \begin{align*}
+        \Imarg =& H_p(q(x))-H_p(p(x\mid y))\geq H_p(q(x))-H_p(p(x\mid y))-\KL{p(x\mid y)}{q(x\mid y)}\\
+        =& H_p(q(x))-H_p(p(x\mid y))+H_p(p(x\mid y))-H_p(q(x\mid y)) = H_p(q(x))-H_p(q(x\mid y))=\Iml
+    \end{align*}
+
+    In both of these, we simply appeal to $\KL{p}{q}\geq 0$ and $\KL{p}{q}=-H_p(p)+H_p(q)$.
+\end{proof}
+
+\renewcommand\thetheorem{4.10}
+\begin{lemma}
+    For a variational $q_m(x)$ and $q_p(x\mid y)$, if 
+    \begin{enumerate}
+      \item If $\KL{p(X\mid Y)}{q(X\mid Y)}\geq \frac{1}{2}\KL{p(X)}{q(X)}$ 
+      then $\Iml$ has lower error than $\Ipost$
+      \item If $\KL{p(X)}{q(X)}\geq \frac{1}{2}\KL{p(X\mid Y)}{q(X\mid Y)}$ 
+      then $\Iml$ has lower error than $\Imarg$
+    \end{enumerate}
+  \end{lemma}
+\begin{proof}
+  We will look at the error of each of the statements
+    \begin{enumerate}
+      \item $\left|\Iml-I\right|\leq \left|\Ipost-I\right|$
+      \begin{align*}
+        \left|\Iml-I\right|\leq& \left|\Ipost-I\right|\\
+        \left|\KL{p(x)}{q_m(x)}-\KL{p(x\mid y)}{q_p(x\mid y)}\right|\leq& \left|\KL{p(x\mid y)}{q_p(x\mid y)}\right|\\
+        \KL{p(x)}{q_m(x)}\leq& 2\KL{p(x\mid y)}{q_p(x\mid y)}\\
+        \frac{1}{2}\KL{p(x)}{q_m(x)}\leq& \KL{p(x\mid y)}{q_p(x\mid y)}\\
+      \end{align*}
+      \item $\left|\Iml-I\right|\leq \left|\Imarg-I\right|$
+      \begin{align*}
+        \left|\Iml-I\right|\leq& \left|\Imarg-I\right|\\
+        \left|\KL{p(x)}{q_m(x)}-\KL{p(x\mid y)}{q_p(x\mid y)}\right|\leq& \left|\KL{p(x)}{q_m(x)}\right|\\
+        \KL{p(x\mid y)}{q_p(x\mid y)}\leq& 2\KL{p(x)}{q_m(x)}\\
+        \frac{1}{2}\KL{p(x\mid y)}{q_p(x\mid y)}\leq& \KL{p(x)}{q_m(x)}\\
+      \end{align*}
+    \end{enumerate}
+\end{proof}
+
+% For each of the experiments, the source code can be found at
+% \begin{center}
+%   \url{https://github.com/calebdahlke/FastVariationalEstimation}
+% \end{center}

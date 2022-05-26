@@ -1,0 +1,129 @@
+Variational MI estimators~\cite{poole2019variational} address the
+computational and sample complexity issues of NMC estimators by
+recasting MI calculation as an optimization problem.  In some cases we
+can obtain MI bounds using Gibbs' inequality.  The proof is a result
+of non-negativity of the Kullback-Leibler divergence, briefly:
+$\KL{p}{q} = H_p(q) - H(p) \geq 0$, and so we can bound entropy as
+$H_p(q) \geq H(p)$.  In other cases we desire an approximation, rather
+than a bound.  We discuss both cases.
+
+\subsection{Variational MI Bounds}
+Applying Gibbs' inequality to the conditional entropy $H(X \mid Y)
+\leq H_p(q(X \mid Y))$ we have the lower
+bound~\cite{agakov2004algorithm},
+\begin{equation}\label{eq:mi_post}
+  I(X;Y) \geq \max_q \, H(X) - H_p( q(X \mid Y) ) \equiv \Ipost.
+\end{equation}
+which we call the \emph{variational posterior lower bound}.  Observe
+that calculation of the lower bound $\Ipost$ requires evaluation of
+the marginal entropy $H(X)$ under the model $p$, which may be
+prohibitive.  Applying Gibbs' inequality, instead, to the marginal
+entropy $H(X) \leq H_p(q(X))$ we obtain the \emph{variational marginal
+  upper bound},
+\begin{equation}\label{eq:mi_marg}
+  I(X;Y) \leq \min_q \, H_p( q(X) ) - H(X \mid Y) \equiv \Imarg
+\end{equation}
+Observe that evaluation of the upper bound $\Imarg$ requires
+evaluation of the conditional entropy \mbox{$H(X \mid Y)$} under the
+model $p$.  For this reason, both bounds ($\Ipost$ and $\Imarg$) apply
+only when the model entropy terms can be calculated or
+ignored--typically true for sequential decision
+making~\cite{pacheco2019variational, Foster2019, foster2020unified,
+  agakov2004algorithm}.
+
+\subsection{Variational MI Approximation : Implicit Likelihood Models}
+In many cases, the model entropy terms in
+\EQNS\eqref{eq:mi_post}~and~\eqref{eq:mi_marg} cannot be calculated 
+and so we cannot obtain MI bounds.  By replacing both entropy terms with
+their cross-entropies we have the following
+approximation~\cite{Foster2019}:
+\begin{equation}\label{eq:mi_ml}
+  I(X;Y) \approx H_p( q_m(X) ) - H_p( q_p(X \mid Y) ) \equiv \Iml   
+\end{equation}
+where the variational distributions are $q_m(x)$ (marginal) and
+$q_p(x \mid y)$ (posterior).  Reversing the entropy terms yields an
+analogous estimator: \mbox{$\hat{I}_{m+\ell} \equiv H_p( q_m(Y) ) -
+H_p( q_\ell( Y \mid X ) )$}
+%% \begin{equation}\label{eq:mi_implicit}
+%%   I(X;Y) &\approx H_p( q_m(Y) ) - H_p( q_\ell( Y \mid X ) ) \equiv \hat{I}_{m+\ell}
+%% \end{equation}
+Both estimators avoid evaluation of model probabilities, and thus are
+useful for implicit likelihood models.  We focus on $\Iml$ for
+consistency, but note that our results in \SEC\ref{varoptim} apply
+equally to $\hat{I}_{m+\ell}$, which is the form discussed in Foster
+et al.~(\citeyear{Foster2019}).  In \SEC\ref{varoptim} we will discuss
+how to find the best such approximation.
+
+
+%% The error of this approximation is the difference of both 
+%% cross-entroipy terms errors, that is $KL(p(x)||q(x))-KL(p(x|y)||q(x|y))$.\\
+
+
+%% NMC has it problem with finite sample bias due to plug-in estimators and has 
+%% issues computing implicit likelihoods. Methods have been developed to deal with 
+%% these issues or minimze their effect, but ideally, one would like to not have to 
+%% deal with them. Variational distributions can be used in this scenario to 
+%% "approximate" a denstiy $p(x)$ with a simpler, more computationally tractable 
+%% distribution, $q(x)$.
+
+%% \subsection{Variational MI Bounds}
+%% With a variational distribution, $q(x)$, we can use the notion of
+%% \emph{Cross Entropy}.
+%% \begin{equation}
+%%   H_p(q(x))=-\int p(x)\log(q(x))dx
+%% \label{def:VarEnt}
+%% \end{equation}
+%% Gibbs' Inequality tells us that cross entropy bounds true entropy, that is
+%% \begin{equation}
+%%   H_p(p(x))\leq H_p(p(x))+KL(p(x)||q(x))=H_p(q(x))
+%% \end{equation}
+%% Any distribution we choose to use for the cross entropy term will upper
+%% bound the true entropy and the error of the approximation is $KL(p(x)||q(x))$. 
+%% Finding an optimal distribution is made easy by simply minimizing the 
+%% KL divergence between the true and varitional distribution and equality 
+%% holds if and only if $q(x)=p(x)$ almost surely.\\
+%% With cross-entropy, for any distribution $q(x)$ we can derive an upper 
+%% bound on MI via the \textbf{Variational Marginal Upper Bound}
+%% \begin{equation}\label{eq:mi_marg}
+%%   I(X;Y) \leq H_p( q(X) ) - H_p(p(x \mid y)) \equiv \Imarg
+%% \end{equation}
+%% Here, the cross-entropy term bounds the marginal entropy, bounding the 
+%% Mutual Infromation from above by and error term of $KL(p(x)|q(x))$.
+%% While equation \ref{eq:mi_marg} avoids explicit evaluation of the
+%% marginal entropy $H_p(p(x))$, evaluation of the conditional entropy
+%% $H_p(p(x \mid y))$ prohibits the use in implicit likelihood models.\\
+
+%% Similarly, using Gibbs' inequality~\cite{agakov2004algorithm} derives 
+%% the \textbf{Variational Posterior Lower Bound}
+%% \begin{equation}\label{eq:mi_post}
+%%   I(X;Y) \geq H(X) - H_p( q(X \mid Y) ) \equiv \Ipost.
+%% \end{equation}
+%% The cross-entropy terms is used here to bound the conditional 
+%% entropy term with a lower bound error of $KL(p(x|y)||q(x|y))$.
+%% Calculation of the above bound does not require knowledge of the
+%% likelihood, and thus can be used in implicit likelihood settings.
+%% However, calculation of the first term $H(X)$ prohibits the use of
+%% this estimator in sequential reasoning tasks, since it requires the
+%% posterior entropy $H(X \mid \Ycal)$ for some history of observations
+%% $\Ycal$.  See~\cite{pacheco2019variational, Foster2019} for more
+%% discussion of variational MI bounds in sequential reasoning
+%% tasks. Note that both equations \ref{eq:mi_marg} and \ref{eq:mi_post}
+%% become tight when $\KL{p}{q} = 0$ almost surely.
+
+%% \subsection{Variational MI Approximation}
+%% Because both of the previous bounding methods still require evaluating a
+%% true entropy term, $H_p(p(x))$ or $H_p(p(x|y))$, which each give rise to their
+%% own problems, Foster et al.~(\citeyear{Foster2019}) propose the
+%% following approximation:
+%% \begin{equation}\label{eq:mi_ml}
+%%   I(X;Y) \approx H_p( q_m(X) ) - H_p( q_p(X \mid Y) ) \equiv \Iml
+%% \end{equation}
+%% For variational distributions $q_m(x)$ (marginal) and $q_p(x \mid y)$
+%% (posterior) the above estimator replaces each of the entropy terms
+%% with their cross-entropy $H_p(q)$.  Evaluating this estimator only
+%% requires expectations w.r.t. the model, and does not require pointwise
+%% evaluation of any model components.  As such, the estimator $\Iml$
+%% applies equally well for implicit likelihood models and for sequential
+%% decision making.  Note that $\Iml$ is an approximation and is not in
+%% general a bound. The error of this approximation is the difference of both 
+%% cross-entroipy terms errors, that is $KL(p(x)||q(x))-KL(p(x|y)||q(x|y))$.\\

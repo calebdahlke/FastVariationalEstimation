@@ -1,0 +1,133 @@
+Consider an arbitrary joint distribution $p(x,y)$ with latent variable $x$ and
+observable variable $y$.  The shared information between these can be
+computed via the \emph{mutual information} (MI)~\cite{Cover2006,
+mackay2003information}:
+\begin{equation}\label{eq:mi}
+  I(X;Y) = H(Y) - H(Y \mid X).
+\end{equation}
+The \emph{marginal entropy} is given by \mbox{$H(Y) = \mathbb{E}[
+- \log p(Y) ]$} while the \emph{conditional entropy}
+is \mbox{$H(Y \mid X) = \mathbb{E}[ - \log p(Y \mid X) ]$}.  Entropy
+expectations are taken with respect to the joint $p(x,y)$.  
+
+\begin{wrapfigure}{r}{0.3\textwidth}
+ \vspace*{-10mm}
+ \centering
+  \tikz{
+% nodes
+ \node[latent] (z) {$z$};%
+ \node[latent,left=of z,fill] (x) {$x$}; %
+ \node[latent,right=of z] (y) {$y$}; %
+% edges
+ \edge {x} {z}
+ \edge {z} {y}}
+ \caption{\small \textbf{Implicit Likelihood via Nuisance Variables} Likelihood $p(y \mid x)$
+ marginalizes  $z$.}
+ \label{fig:mc}
+\end{wrapfigure}
+
+\subsection{Calculating MI : Explicit and Implicit Models}
+Despite its simple definition (\EQN\eqref{eq:mi}) calculating MI is
+difficult in practice since entropy terms require exact evaluation of
+the probabilities.  For example, calculating the marginal entropy
+$H(Y)$ requires evaluation of $\log p(y)$, which often lacks a
+closed-form.  Similarly, $\log p(y \mid x)$ may lack a closed-form in
+so-called \emph{implicit likelihood models} that require
+marginalization of nuisance variables (c.f. \FIG\ref{fig:mc}) or are
+defined by simulation as in the SIR model
+of \SEC\ref{sec:sir}. Another option is to use the symmetric form
+$I(X;Y) = H(X) - H(X\mid Y)$. But this approach requires evaluation of
+the posterior $\log p(x \mid y)$, which is also not generally
+closed-form.  For these reasons approximations must be considered,
+such as the commonly employed sample-based estimators discussed next.
+%% Either form may be
+%% preferable depending on the dimensions of $X$ 
+%% and $Y$ as well as available distributions.  For example, when the
+%% dimensionality of observations $Y$ is less than that of $X$ then the
+%% form in \EQN\eqref{eq:mi} may be preferred.  However, the marginal
+%% entropy $H(Y)$ requires pointwise evaluation of the marginal
+%% likelihood $p(y)$, which is typically unavailable.  Furthermore, the
+%% posterior $p(x \mid y)$ typically lacks a closed-form.  Finally,
+%% so-called \emph{implicit likelihood models} lack explicit
+%% representation of the likelihood $p(y\mid x)$, making the calculation
+%% of $H(Y \mid X)$ prohibitive.  
+
+\subsection{Nested Monte Carlo (NMC) Estimation}\label{sec:nmc}
+%% Despite the seemingly simple definition in \EQN\eqref{eq:mi}, MI
+%% typically lacks a closed-form solution.  For example, calculating the
+%% marginal entropy $H(Y)$ requires evaluation of the marginal likelihood
+%% $p(y) = \int p(x,y) \, dx$, which is not analytic in general.  Similar
+%% computational challenges hold for alternate representations.  This
+%% motivates the use of approximation, which we briefly discuss.
+
+Given samples $\{(x^i,y^i)\}_{i=1}^N \sim p$ one may use a simple
+Monte Carlo procedure to estimate MI,
+\begin{equation}\label{eq:nmc}
+  \hat{I}_{NMC} = \frac{1}{N} \sum_{i=1}^N \log \frac{ p(y^i \mid x^i)
+  }{ \frac{1}{N} \sum_{j=1}^N p(y^i \mid x^j) }
+\end{equation}
+The use of a plug-in estimator for the marginal
+$p(y^i) \approx \frac{1}{N} \sum_j p(y^i \mid x^j)$ makes this a
+\emph{nested} Monte Carlo (NMC) estimator.  The NMC is consistent, but
+exhibits considerable finite sample bias, as can be shown by Jensen's
+inequality~\cite{zheng2018robust, rainforth2018nesting}.  Due to its
+bias NMC is often used as a probabilistic bound on MI, but the bound
+gap can be significant as bias decays slowly.
+%% the plug-in estimate of the marginal likelihood
+%% $p(y) \approx \frac{1}{N} \sum_j p(y \mid x^j)$ exhibits significant
+%% finite sample bias~\cite{zheng2018robust, rainforth2018nesting}.  
+%% This bias can be reduced through different estimation techniques
+%% (e.g. leave-one-out), or via robust estimation~\cite{zheng2018robust},
+%% but it remains a significant factor.
+A bigger limitation is that the NMC estimator (\EQN\eqref{eq:nmc})
+requires pointwise evaluation of the conditional probability $p(y \mid
+x)$, which may be impossible for simulation-based implicit likelihood
+models, such as the SIR Epidemiology model in \SEC\ref{sec:sir}.
+%% Consider, for example, the Markov chain
+%% in \FIG\ref{fig:mc}.
+%% The likelihood is given by
+%% \mbox{$p(y \mid x) = \int p(z \mid x) p(y \mid z) \, dz$} which
+%% may lack a closed-form.  Such implicit likelihood models will be a
+%% core focus of this paper in later sections.
+
+
+%% This approximation has an error of $KL(p(x|y),q(x|y))$ where $KL$ is
+%% the Kullback-Leibler Divergence. This means this is a strict bound
+%% except for when $p(x|y)=q(x|y)$ almost surely.\\ The main goal of
+%% variational planning is to maximize the bound of \ref{GibbsBound} and
+%% then select an action based upon the highest variational mutual
+%% information.
+
+
+
+%% \subsection{Bayesian Optimal Experimental Design}
+
+%% Let $x$ be a latent variable, $y$ be an observation, and $\mathcal{A}=\{a_1,\dots, a_n\}$ be a set of actions one can take., then the posterior is
+%% \begin{equation}
+%% p(x|y,a)=p(x)p_a(y|x)
+%% \end{equation}
+%% Bayesian Optimal Experimental Design aims to find the optimal decision $a^*$ that maximizes information gain
+%% \begin{equation}
+%% a^* = \argmax_a I_a(X,Y) = H(X)-H_a(X|Y)
+%% \end{equation}
+%% Where $I_a(X,Y)$ is the Mutual Information of decision $a$ and $H(\cdot)$ is the differential entropy.\\
+%% Calculating Mutual Information is not easy as a handful of issues arise. First, the conditional entropy requires evaluations of the posterior, $p(x|y)$, or the predictive prior, $p(y)$, both of which in general may not be found in closed form. 
+%% \[H_a(X|Y)=\int p(y)\int p(x|y)\log\dfrac{p(x,y)}{p(y)}dxdy\]
+%% A second problem that arises is that the likelihood may be implicit. For a simple example, consider the PGM with three RVs, $x$, $y$ and $z$ as follows
+
+%% \begin{equation}
+%% p(y|x)=\int p(z|x)p(y|z)dz
+%% \end{equation}
+%% In many common and relatively simple cases, the likelihood may not be closed form.\\
+%% Due to the difficulties with the distributions, the integral is intractable and standard MC methods cannot be used to evaluate it. A naive approach to circumnavigate this is to try Nested Monet Carlo
+%% \begin{equation}
+%% I_{NMC}(X,Y) = \dfrac{1}{N}\sum_{n=1}^{N} \log\dfrac{p(y_n|x_{n,0})}{\dfrac{1}{M}\sum_{m=1}^M p(y_n|x_{n,m})}
+%% \end{equation}
+%% where $x_{n,m}\sim p(x)$ and $y_n\sim p(y|x=x_{n,0})$. However, this has a computation cost of $\mathcal{O}(NM)$ and thus is too computationally expensive in practice.
+
+%% \subsection{Moment Matching}
+%% Once a specific member of the Exponential Family, $q(x|\theta)$, has been chosen, the paramters, $\theta$, need to be set. Moment matching is finding the parameters that match the sufficient statistic under expectation from both the target and variational distribution.
+%% \begin{equation}
+%% \E_{p(x,y)}\left[T(x,y)\right]=\E_{q(x,y|\theta)}\left[T(x,y)\right]
+%% \end{equation}
+%% Given any target distribution, $p(x|y)$, the member of the Exponential Family, $q(x|y,\theta)$, that minimizes the KL Divergence is the one whose distribution matches moments. So maximizing the bound in \ref{GibbsBound} when restricted to the exponential family amounts to Moment Matching.

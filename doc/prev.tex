@@ -1,0 +1,94 @@
+In this paper, we focused on the variational methods, $\Imarg$, $\Ipost$
+~\cite{agakov2004algorithm}, and $\Iml$. The focus of each of these methods was 
+computation speed ups for computing the optimal distribution. We also breifly 
+discussed the Nested Monte Carlo estimator in \SEC\ref{background} and some of 
+the challenges it faced. For each of these methods, Foster et al. 
+~\cite{Foster2019} does a much more thorough analysis of convergence rate and 
+run time. For an alternative implicit likelihood approximator, we also consider 
+the likelihood-free inference by ratio (LFIRE) used by Kleinegesse and Gutmann 
+~\cite{kleinegesse2021sequential} as a baseline for comparison purposes. For 
+a general discussion of a variety of variational methods, a good resource is 
+Poole et al ~\cite{poole2019variational} or Foster et al ~\cite{foster2020unified}.
+
+%% In this section, methods to calculate mutual information and
+%% variational methods will be discussed. There will be a overview of
+%% each approach, however a deep analysis of each can be found in the
+%% paper by Foster et al.~\cite{Foster2019}.
+
+%% \subsection{Nested Monte Carlo}
+%% The first approach is included from completeness but is a naive approach. 
+%% Due to having neither $p(x|y)$ or $p(y)$ in closed form, sampling for Monte 
+%% Carlo must be done twice in a nested manor.
+%% \begin{equation}
+%%   I(x,y)=\int\int p(x,y)\log \dfrac{p(y|x)}{p(y)}dxdy\approx\dfrac{1}{N}\sum_{n=1}^N \log\dfrac{p(y_n|x_{n,0})}{\dfrac{1}{M}\sum_{m=1}^Mp(y_n|x_{n,m})}
+%% \end{equation}
+%% where $x_{n,m}\sim p(x)$ and $y_n\approx p(y|x_{n,0})$. Here, $x$ is being 
+%% marginalized out in the denominator to approximate $p(y)$.\\
+
+%% \subsection{Variational Posterior}
+%% The first variational method to discuss uses $q_p(x|y)$ to lower bound the 
+%% posterior, $p(x|y)$. It was originally used by Barber and Agakov \cite{agakov2004algorithm} 
+%% to bound mutual information for transmission on noisy channels.
+%% \begin{definition}{Variational Posterior $I_{post}(x,y)$}\\
+%%   \begin{equation}
+%%     I_{post}(x,y)=\int\int p(x,y)\log\dfrac{q_p(x|y)}{p(x)}dxdy=H_p(p(x))-H_p(q(x|y))
+%%   \end{equation}
+%% \end{definition}
+
+%% To compute this, a single MC estimator is needed
+
+%% \begin{equation}
+%%   I_{post}(x,y)=\int\int p(x,y)\log\dfrac{q_p(x|y)}{p(x)}dxdy \approx \dfrac{1}{N}\sum_{n=1}^N \log\dfrac{q_p(x_n|y_n)}{p(x_n)}
+%% \end{equation}
+%% where $x_n,y_n\sim p(x,y)$. To find the best variational distribution $q_p(x|y)$, 
+%% one only needs to minimize the error given from Gibbs' Inequality
+
+%% \[\min_{q_p}KL(p(x|y)||q_p(x|y))\]
+%% Because KL is strictly non-negative, this error only occurs in one direction, 
+%% giving us a bound. In the case of the Variational Posterior, this give a lower 
+%% bound, so $I(X,Y)\geq I_{post}(x,y)$
+
+%% \subsection{Variational Marginal}
+
+%% The second variational method uses $q_m(y)$ to bound the predictive prior marginal. 
+
+%% \begin{definition}{Variational Marginal $I_{marg}(x,y)$}\\
+%%   \begin{equation}
+%%     I_{marg}(x,y)=\int\int p(x,y)\log\dfrac{p(y|x)}{q_m(y)}dxdy =H_p(q_m(y))-H_p(p(y|x))
+%%   \end{equation}
+%% \end{definition}
+
+%% Again, a single MC estimator is needed to compute this
+
+%% \begin{equation}
+%%   I_{marg}(x,y)=\int\int p(x,y)\log\dfrac{p(x|y)}{q_m(x)}dxdy \approx \dfrac{1}{N}\sum_{n=1}^N \log\dfrac{p(x_n|y_n)}{q_m(x_n)}
+%% \end{equation}
+%% where $x_n,y_n\sim p(x,y)$. To find the best variational distribution $q_m(x)$, 
+%% one again only needs to minimize the error in Gibbs' Inequality 		
+%% \[\min_{q_m}KL(p(x)||q_m(x))\]
+%% This error give an upper bound on the true mutual information, 
+%% so $I(X,Y)\leq I_{marg}(x,y)$
+
+%% \subsection{Finding Optimal Varaitional Distributions}
+%% In the case of both the Variational Posterior and Variational Marginal, 
+%% we can directly approach minimizing the respective KL errors unlike the 
+%% bounding need for the Impilcit Likelihood approximation. The standard 
+%% approach to this is to use a gradient based optimizer to minimize both 
+%% of these errors however, with slight modifications to Theorem~\ref{EquivMethods}, 
+%% we can actually show that Moment Matching is again equivalent to minimizing 
+%% the errorin the Gaussian case.
+%% \begin{theorem}{Equivalence of Moment Matching and Gradient Methods}\\
+%%   Let $q_\eta(x)=N(\mu,\Sigma)$ where $\eta$ are the exponential family parameters of the marginal Gaussian and $T(x)$ are the sufficient statistics. Then
+%% \[\E_{p(x)}[T(x)]=\E_{q(x)}[T(x)]\]
+%%   finds the same minimum as gradient ascent of
+%%   \[\min_{q_m}KL(p(x)||q_m(x))\]
+%%   Likewise, let $q_\eta(x|y)=N(Ay+b,\Sigma)$ where $\eta$ are the exponential family parameters of the joint Gaussian and $T(x,y)$ are the sufficient statistics. Then
+%% \[\E_{p(x,y)}[T(x,y)]=\E_{q(x,y)}[T(x,y)]\]
+%%   finds the same minimum as gradient ascent of
+%%   \[\min_{q_p}KL(p(x|y)||q_p(x|y))\]
+%%   \label{EquivMethodMargPost}
+%% \end{theorem}\
+%% The proof of Theorem~\ref{EquivMethodMargPost} is near identical to that 
+%% of Theorem~\ref{EquivMethods} just with the argument broken up. This will 
+%% be included in the appendix for completeness.
+

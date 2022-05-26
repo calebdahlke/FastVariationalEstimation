@@ -1,0 +1,49 @@
+Since $\Iml$ is neither an upper nor lower bound, we must minimize the
+absolute error
+\begin{equation}\label{eq:mi_ml_opt}
+  \Iml^* = \argmin_{q_m, q_p} \, \left| I(X;Y) - \Iml(q_m, q_p) \right|
+\end{equation}
+which is non-convex in general.  We instead minimize the upper bound
+as in Foster et al.~(\citeyear{Foster2019}),
+\begin{lemma}
+  \label{thm:fosterbound} For any model $p(x,y)$ and distributions
+  $q_m(x)$, $q_p(x\mid y)$, the following bound holds:
+  {\fontsize{9}{10}\selectfont \[\left|\Iml(X,Y)-I(X,Y)\right|\leq
+  -\E_{p(x,y)}\left[\log q_m(X)+\log q_p(X\mid Y)\right]+C\]} where
+  $C=-H_p(p(X))-H_p(p(X\mid Y))$ does not depend on $q_m$ or
+  $q_p$. Further, the RHS is $0$ iff $q_m(x)=p(x)$ and $q_p(x\mid
+  y)=p(x\mid y)$ almost surely.  \label{FosterBound2}
+\end{lemma}
+Previous optimization approaches~\cite{Foster2019} minimize this upper bound using (stochastic) gradient descent:
+\begin{equation}\label{eq:sgd_opt}
+  q_m^* = \argmax_{q_m} \E_{p(x,y)}[\log(q_m(X))]\hspace{2em}  q_p^* = \argmax_{q_p} \E_{p(x,y)}[\log(q_p(X\mid Y))]
+\end{equation}
+Note that \EQN\eqref{eq:sgd_opt} does not assume that $q_m(x)$ and
+$q_p(x\mid y)$ share a joint distribution $q(x,y)$. We show that under
+Gaussianity conditions, not only are optimal $q_m$ and $q_p$ the
+marginal and posterior of a joint Gaussian, but that the optimal joint
+is found via moment matching.
+\begin{theorem}{Equivalence of Moment Matching and Stochastic Gradient Descent}\\
+  Let $q_m(x)$ and $q_p(x\mid y)$ be exponential family.  Further, let
+  $q_p(x\mid y)$ satisfy the form of \EQN\eqref{eq:ExpFamCond} and the
+  linear conditional expectations property (\EQN\eqref{eq:linearY}).
+  Then, moment matching the joint distribution $q(x,y)$ yields optimal
+  $q_m$ and $q_p$ that minimize the bound on $\Iml$ in
+  Lemma \ref{thm:fosterbound}.  \label{EquivMethods}
+\end{theorem}
+The proof of Theorem~\ref{EquivMethods} (Appendix) follows immediately
+from Lemma~\ref{lemma:VMMM} and Lemma~\ref{lemma:MMOptCrit}.
+%% says that
+%% moment matching the joint minimizes $-\E_{p(x,y)}\left[\log
+%% q_m(x)\right]$.  Lemma ~\ref{lemma:OptCrit} and ~\ref{lemma:MMOptCrit}
+%% show that moment matching the joint minimizes $-\E_{p(x,y)}\left[\log
+%% q_p(x\mid y)\right]$.
+Finally, we show that the general result in Theorem
+~\ref{EquivMethods} is satisfied for Gaussian $q_m(x)=\Ncal(m,S)$ and
+a linear conditional Gaussian $q_p(x\mid y)=\Ncal(Ay+b,\Sigma_p)$
+satisfy. 
+\begin{corollary}
+  Let $q_m(x)=\Ncal(m,S)$ and $q_p(x\mid y)=\Ncal(Ay+b,\Sigma_p)$. Then theorem 
+  ~\ref{EquivMethods}  is satsified and thus moment matching a Joint Gaussian 
+  $q(x,y)=\Ncal(\mu, \Sigma)$ will minimize lemma~\ref{thm:fosterbound}.
+\end{corollary}

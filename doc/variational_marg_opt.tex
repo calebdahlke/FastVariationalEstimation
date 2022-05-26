@@ -1,0 +1,39 @@
+To optimize the variational marginal upper bound, $\Imarg$, we must minimze the
+bound gap.
+\begin{equation}
+  I(X;Y) \leq \min_{q_m} \, H_p(q_m(X))-H_p(X \mid Y) = \min_{q_m(X)}H_p(q_m(X)) - \text{const.}
+\end{equation}
+where the model entropy $H_p(X \mid Y)$ is constant w.r.t. $q_m(x)$
+and can be ignored.  If $q_m(x)$ is a Gaussian, then the minimization
+is found by moment matching:
+\begin{lemma}
+  \label{lemma:VMMM} Let $q_m(x)$ be in the exponential family with
+  statistics $T(x)$, then for any $p(x,y)$, the optimal $\Imarg^*$ is
+  given by moment matching: 
+  \[
+    \E_{q_m(x)}\left[T(X)\right]=\E_{p(x)}\left[T(X)\right]
+  \]  
+\end{lemma}
+\vspace*{-5mm}\begin{proof} Since $H_p(X)$ is constant in $q_m$ we have,
+  \[
+    \argmin_{q_m} \, H_p(q_m(X)) = \argmin_{q_m} \,
+    H_p(q_m(X))-H_p(X) = \argmin_{q_m} \, \KL{p(X)}{q(Y)}
+  \]  
+  By Lemma~\ref{lemma:MMKL}, $\E_{q_m(x)}\left[T(X)\right]=\E_{p(x)}\left[T(X)\right]$
+  minimizes $\KL{p(X)}{q(Y)}$.
+  %% We also know 
+  %% $\E_{q(x,y)}\left[T(x,y)\right]=\E_{p(x,y)}\left[T(x,y)\right]$
+  %% provides $\E_{q(x)}\left[T(x)\right]=\E_{p(x)}\left[T(x)\right]$.
+\end{proof}
+Now consider the Gaussian case where $q_m(x)=\Ncal(m,S)$ and a joint
+Gaussian $q(x,y)=\Ncal(\mu,\Sigma)$. Moment matching the joint
+distribution,
+$\E_{q(x,y)}\left[T(X,Y)\right]=\E_{p(x,y)}\left[T(X,Y)\right]$,
+provides the marginal moment matching condition. To see this, note
+that the marginal moments of the joint are
+$q(x)=\Ncal(m_x,\Sigma_{xx})$ where $m_x=m$ is the $x$ component of
+the mean and $\Sigma_{xx}=S$ is the block variance of $x$ in $\Sigma$.
+Thus, matching the joint Gaussian statistics satisfies
+Lemma~\ref{lemma:VMMM} and yields the optimal Gaussian $q_m$ and
+corresponding optimal $\Imarg$.
+

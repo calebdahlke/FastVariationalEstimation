@@ -66,8 +66,7 @@ else:
 bounds_sir = [[0, 0.5], [0, 0.5]]
 
 # Define the SequentialBED object
-# foo = "../data/sirmodel_seq"
-foo = "C:/Users/Caleb/Code/Python/stevenkleinegesse/seqbed-master/saves/sirmodel_seq"
+foo = "../data/sirmodel_seq"
 SIR_death = sequentialdesign.SequentialBED(
     params,
     model,

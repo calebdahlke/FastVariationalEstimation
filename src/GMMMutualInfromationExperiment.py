@@ -688,7 +688,7 @@ if __name__ == "__main__":
 
     ###################### Create GMM Model ######################################
     K = 3 # Number of Trials
-    Ns = [400,500,1000,2000] #Number of Samples
+    Ns = [400,500,1000] #Number of Samples,2000
     Tol = 10**(-8)
     M = 2 # Number of Componentes
     Dx = 1 # Dimension of X
